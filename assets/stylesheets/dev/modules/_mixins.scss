@@ -1,0 +1,6 @@
+@mixin background-cover-mixin($gradient, $imageLocation){
+	background-image: linear-gradient(0deg, $gradient, $gradient), url($imageLocation);
+	background-position: center center, center center;
+	background-repeat: no-repeat;
+	background-size: cover, cover;
+}

@@ -1,0 +1,6 @@
+/* General Styles
+------------------------*/
+.outer-container{ 
+	@include outer-container; 
+	@include clearfix;
+}

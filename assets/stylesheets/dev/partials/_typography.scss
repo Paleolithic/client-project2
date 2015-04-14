@@ -1,0 +1,19 @@
+h1,h2,h3,h4,h5,h6{
+	color: $headerColor;
+	font-family: $headerFamily;
+}
+
+h1{
+	margin: 0.45em 0;
+	font-weight: lighter;
+	text-align: center;
+	@include span-columns(12);
+}
+
+h2{
+	font-size: 1.4em;
+}
+
+p{
+	color: $bodyColor;
+}
