@@ -4,3 +4,23 @@
 	@include outer-container; 
 	@include clearfix;
 }
+
+// Pagination holder style
+.holder{
+	text-transform: capitalize;
+	margin-top: 21px;
+	margin-bottom: 21px;
+
+	a{
+		cursor: pointer;
+		display: inline-block;
+		margin: 7px 3px;
+		padding: 0.75em 1em;
+		background-color: #477dca;
+		color: white;
+
+		&:hover, &.jp-current{ background-color: #2c5999 }
+		&.jp-previous{ 	border-radius: 3px 0 0 3px; }
+		&.jp-next{		border-radius: 0 3px 3px 0; }
+	}
+}

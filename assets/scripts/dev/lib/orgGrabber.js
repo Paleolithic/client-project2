@@ -68,21 +68,12 @@
 				//do something....
 				}
 				else{
-				//make a table from the XML, the following comments shows what the xml looks like:
-				//<data>
-				//<name>Some Hospital</name>
-				//<description>Something cool here about the hospital</description>
-				//<email>sf@lkj.sdf</email>
-				//<website>http://www.rit.edu</website>
-				//<nummembers>33</nummembers>
-				//<numcalls>300</numcalls>
-				//</data>
-				var x='<table><tr><td>Name:</td><td>'+$(data).find('name').text()+'</td></tr>';
-				x+='<tr><td>Description:</td><td>'+$(data).find('description').text()+'</td></tr>';
-				x+='<tr><td>email:</td><td>'+$(data).find('email').text()+'</td></tr>';
-				x+='<tr><td>website:</td><td>'+$(data).find('website').text()+'</td></tr>';
-				x+='<tr><td>number of members:</td><td>'+$(data).find('nummembers').text()+'</td></tr>';
-				x+='<tr><td>number of calls:</td><td>'+$(data).find('numcalls').text()+'</td></tr></table>';
+				var x='<table><tr><td>Name:</td><td>'+myFind('name', data)+'</td></tr>';
+				x+='<tr><td>Description:</td><td>'+myFind('description', data)+'</td></tr>';
+				x+='<tr><td>Email:</td><td>'+myFind('email', data)+'</td></tr>';
+				x+='<tr><td>Website:</td><td>'+myFind('website', data)+'</td></tr>';
+				x+='<tr><td>Number of Members:</td><td>'+myFind('nummembers', data)+'</td></tr>';
+				x+='<tr><td>Cumber of Calls:</td><td>'+myFind('numcalls', data)+'</td></tr></table>';
 						
 					/// this line will change slightly when we add the tabs plugin
 					$('#output').html(x);
@@ -122,18 +113,18 @@
 					$locations = $(data).find('location');
 					$locations.each(function(i){
 						x+= '<tr>';
-						x+=		'<td>' + $(this).find('type').text();
-						x+=		'<td>' + $(this).find('address1').text();
-						x+=		'<td>' + $(this).find('address2').text();
-						x+=		'<td>' + $(this).find('city').text();
-						x+=		'<td>' + $(this).find('state').text();
-						x+=		'<td>' + $(this).find('zip').text();
-						x+=		'<td>' + $(this).find('phone').text();
-						x+=		'<td>' + $(this).find('ttyPhone').text();
-						x+=		'<td>' + $(this).find('fax').text();
-						x+=		'<td>' + $(this).find('latitude').text();
-						x+=		'<td>' + $(this).find('longitude').text();
-						x+=		'<td>' + $(this).find('countyName').text();
+						x+=		'<td>' + myFind('type', this)	+ '</td>';
+						x+=		'<td>' + myFind('address1', this)	+ '</td>';
+						x+=		'<td>' + myFind('address2', this)	+ '</td>';
+						x+=		'<td>' + myFind('city', this)	+ '</td>';
+						x+=		'<td>' + myFind('state', this)	+ '</td>';
+						x+=		'<td>' + myFind('zip', this)	+ '</td>';
+						x+=		'<td>' + myFind('phone', this)	+ '</td>';
+						x+=		'<td>' + myFind('ttyPhone', this)	+ '</td>';
+						x+=		'<td>' + myFind('fax', this)	+ '</td>';
+						x+=		'<td>' + myFind('latitude', this)	+ '</td>';
+						x+=		'<td>' + myFind('longitude', this)	+ '</td>';
+						x+=		'<td>' + myFind('countyName', this)	+ '</td>';
 						x+= '</tr>';					
 					})
 					x+= '</table>';
@@ -167,9 +158,9 @@
 					$training = $(data).find('training');
 					$training.each(function(i){
 						x+= '<tr>';
-						x+=		'<td>' + $(this).find('typeId').text();
-						x+=		'<td>' + $(this).find('type').text();
-						x+=		'<td>' + $(this).find('abbreviation').text();
+						x+=		'<td>' + myFind('typeId', this)	+ '</td>';
+						x+=		'<td>' + myFind('type', this)	+ '</td>';
+						x+=		'<td>' + myFind('abbreviation', this)	+ '</td>';
 						x+= '</tr>';					
 					})
 					x+= '</table>';
@@ -182,19 +173,204 @@
 	}
 
 	function getTreatment(id){
-		$('#output').html('going to get Treatment of '+id);
+		console.log(id);
+		$.ajax({
+			type:'get',
+			url:'proxy.php',
+			data:{path:'/'+id+'/Treatments'},
+			dataType:'xml',
+			success:function(data){
+				if($(data).find('error').length!=0){
+				//do something....
+				}
+				else{
+					var x = '<table>';
+					x+= '<tr>';
+					x+= 	'<th class="header">Type ID</th>';
+					x+= 	'<th class="header">Type</th>';
+					x+= 	'<th class="header">Abbreviation</th>';
+					x+= '</tr>';
+
+					$training = $(data).find('treatment');
+					$training.each(function(i){
+
+						x+= '<tr>';
+						x+=		'<td>' + myFind('typeId', this)	+ '</td>';
+						x+=		'<td>' + myFind('type', this)	+ '</td>';
+						x+=		'<td>' + myFind('abbreviation', this)	+ '</td>';
+						x+= '</tr>';					
+					})
+					x+= '</table>';
+					
+					/// this line will change slightly when we add the tabs plugin
+					$('#output').html(x);
+				}
+			}
+		});
 	}
+
 	function getFacilities(id){
-		$('#output').html('going to get Facilities of '+id);
+		console.log(id);
+		$.ajax({
+			type:'get',
+			url:'proxy.php',
+			data:{path:'/'+id+'/Facilities'},
+			dataType:'xml',
+			success:function(data){
+				if($(data).find('error').length!=0){
+				//do something....
+				}
+				else{
+					var x = '<table>';
+					x+= '<tr>';
+					x+= 	'<th class="header">Type ID</th>';
+					x+= 	'<th class="header">Type</th>';
+					x+= 	'<th class="header">Quantity</th>';
+					x+= 	'<th class="header">Description</th>';
+					x+= '</tr>';
+
+					$training = $(data).find('facility');
+					$training.each(function(i){
+						x+= '<tr>';
+						x+=		'<td>' + myFind('typeId', this)	+ '</td>';
+						x+=		'<td>' + myFind('type', this)	+ '</td>';
+						x+=		'<td>' + myFind('quantity', this)	+ '</td>';
+						x+=		'<td>' + myFind('description', this)	+ '</td>';
+						x+= '</tr>';					
+					})
+					x+= '</table>';
+					
+					/// this line will change slightly when we add the tabs plugin
+					$('#output').html(x);
+				}
+			}
+		});
 	}
+
 	function getEquipment(id){
-		$('#output').html('going to get Equipment of '+id);
+		console.log(id);
+		$.ajax({
+			type:'get',
+			url:'proxy.php',
+			data:{path:'/'+id+'/Equipment'},
+			dataType:'xml',
+			success:function(data){
+				if($(data).find('error').length!=0){
+				//do something....
+				}
+				else{
+					var x = '<table>';
+					x+= '<tr>';
+					x+= 	'<th class="header">Type ID</th>';
+					x+= 	'<th class="header">Type</th>';
+					x+= 	'<th class="header">Quantity</th>';
+					x+= 	'<th class="header">Description</th>';
+					x+= '</tr>';
+
+					$training = $(data).find('equipment');
+					$training.each(function(i){
+						x+= '<tr>';
+						x+=		'<td>' + myFind('typeId', this)	+ '</td>';
+						x+=		'<td>' + myFind('type', this)	+ '</td>';
+						x+=		'<td>' + myFind('quantity', this)	+ '</td>';
+						x+=		'<td>' + myFind('description', this)	+ '</td>';
+						x+= '</tr>';					
+					})
+					x+= '</table>';
+					
+					/// this line will change slightly when we add the tabs plugin
+					$('#output').html(x);
+				}
+			}
+		});
 	}
 	function getPhysicians(id){
-		$('#output').html('going to get Physicians of '+id);
+		console.log(id);
+		$.ajax({
+			type:'get',
+			url:'proxy.php',
+			data:{path:'/'+id+'/Physicians'},
+			dataType:'xml',
+			success:function(data){
+				if($(data).find('error').length!=0){
+				//do something....
+				}
+				else{
+					var x = '<table>';
+					x+= '<tr>';
+					x+= 	'<th class="header">Person ID</th>';
+					x+= 	'<th class="header">First Name</th>';
+					x+= 	'<th class="header">Middle Name</th>';
+					x+= 	'<th class="header">Last Name</th>';
+					x+= 	'<th class="header">Suffix</th>';
+					x+= 	'<th class="header">Phone</th>';
+					x+= 	'<th class="header">License</th>';
+					x+= '</tr>';
+
+					$training = $(data).find('physician');
+					$training.each(function(i){
+						x+= '<tr>';
+						x+=		'<td>' + myFind('personId', this)	+ '</td>';
+						x+=		'<td>' + myFind('fName', this)	+ '</td>';
+						x+=		'<td>' + myFind('mName', this)	+ '</td>';
+						x+=		'<td>' + myFind('lName', this)	+ '</td>';
+						x+=		'<td>' + myFind('suffix', this)	+ '</td>';
+						x+=		'<td>' + myFind('phone', this)	+ '</td>';
+						x+=		'<td>' + myFind('license', this)	+ '</td>';
+						x+= '</tr>';					
+					})
+					x+= '</table>';
+					
+					/// this line will change slightly when we add the tabs plugin
+					$('#output').html(x);
+				}
+			}
+		});
 	}
+
 	function getPeople(id){
 		$('#output').html('going to get People of '+id);
+		console.log(id);
+		$.ajax({
+			type:'get',
+			url:'proxy.php',
+			data:{path:'/'+id+'/People'},
+			dataType:'xml',
+			success:function(data){
+				if($(data).find('error').length!=0){
+				//do something....
+				}
+				else{
+					var x = '<table>';
+					x+= '<tr>';
+					x+= 	'<th class="header">Person ID</th>';
+					x+= 	'<th class="header">First Name</th>';
+					x+= 	'<th class="header">Middle Name</th>';
+					x+= 	'<th class="header">Last Name</th>';
+					x+= 	'<th class="header">Suffix</th>';
+					x+= 	'<th class="header">Phone</th>';
+					x+= 	'<th class="header">License</th>';
+					x+= '</tr>';
+
+					$training = $(data).find('physician');
+					$training.each(function(i){
+						x+= '<tr>';
+						x+=		'<td>' + myFind('personId', this)	+ '</td>';
+						x+=		'<td>' + myFind('fName', this)	+ '</td>';
+						x+=		'<td>' + myFind('mName', this)	+ '</td>';
+						x+=		'<td>' + myFind('lName', this)	+ '</td>';
+						x+=		'<td>' + myFind('suffix', this)	+ '</td>';
+						x+=		'<td>' + myFind('phone', this)	+ '</td>';
+						x+=		'<td>' + myFind('license', this)	+ '</td>';
+						x+= '</tr>';					
+					})
+					x+= '</table>';
+					
+					/// this line will change slightly when we add the tabs plugin
+					$('#output').html(x);
+				}
+			}
+		});
 	}
 
 	//This function is called when user changes the state select (and onload)
@@ -250,7 +426,7 @@
    	 				x+='<option value="">All Organization Types<\/option>';
    	 				$('row',data).each(
    	 					function(){
-   	 						x+='<option value="'+$(this).find('type').text()+'">'+$(this).find('type').text()+'<\/option>';
+   	 						x+='<option value="'+myFind('type', this)+'">'+myFind('type', this)+'<\/option>';
    	 					}
    	 				);
    	 				//return x;
@@ -295,32 +471,33 @@
    	 			}
    	 			else{
    	 				$("#resultsTitle").html(' ('+$(data).find('row').length+' total found)');
-   	 				x+="<div><table id=\"myTable\" class=\"tablesorter\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\"><thead><tr><th class=\"header\" style=\"width:90px;\">Type<\/th><th class=\"header\">Name<\/th><th class=\"header\">City<\/th><th class=\"header\">Zip<\/th><th class=\"header\" style=\"width:70px;\">County<\/th><th class=\"header\" style=\"width:40px;\">State<\/th><\/tr><\/thead>";
+   	 				x+="<div><table id=\"myTable\" class=\"tablesorter table table-striped table-hover\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\"><thead><tr><th class=\"header\" style=\"width:90px;\">Type<\/th><th class=\"header\">Name<\/th><th class=\"header\">City<\/th><th class=\"header\">Zip<\/th><th class=\"header\" style=\"width:70px;\">County<\/th><th class=\"header\" style=\"width:40px;\">State<\/th><\/tr><\/thead>";
+   	 				x+="<tbody id='tbody'>"
    	 				$('row',data).each(
    	 					function(){
    	 						x+='<tr>';
-   							x+="<td>"+$(this).find('type').text()+"<\/td>";
-    						x+="<td style=\"cursor:pointer;color:#987;\" onclick=\"getData("+$(this).find('OrganizationID').text()+");\">"+$(this).find('Name').text()+"<\/td>";
-   	 						x+="<td>"+$(this).find('city').text()+"<\/td>";
-   	 						x+="<td>"+$(this).find('zip').text()+"<\/td>";
-   	 						x+="<td>"+$(this).find('CountyName').text()+"<\/td>";
-   	 						x+="<td>"+$(this).find('State').text()+"<\/td><\/tr>";
+   							x+="<td>"+myFind('type', this)+"<\/td>";
+    						x+="<td style=\"cursor:pointer;color:#987;\" onclick=\"getData("+myFind('OrganizationID', this)+");\">"+myFind('Name', this)+"<\/td>";
+   	 						x+="<td>"+myFind('city', this)+"<\/td>";
+   	 						x+="<td>"+myFind('zip', this)+"<\/td>";
+   	 						x+="<td>"+myFind('CountyName', this)+"<\/td>";
+   	 						x+="<td>"+myFind('State', this)+"<\/td><\/tr>";
    	 					}
    	 				);
-   	 				x+="<\/table>";
+   	 				x+="</tbody><\/table>";
    	 			}
 	     		$('#tabelOutput').html(x);
+
+	     		$("div.holder").jPages({
+			        containerID : "tbody",
+			        perPage : 15
+			    });
 	   		}
 		});
 	}
 	
 	//Occasionally we will get back 'null' as a value
 	//you should NEVER show 'null' in the client - make it blank...
-	function myFind(what,data,i){
-		if(i!=-1){
-			return (($(data).find(what).eq(i).text()!='null')?$(data).find(what).eq(i).text()+' ':'')
-		}
-		else{
-			return (($(data).find(what).text()!='null')?$(data).find(what).text()+' ':'')
-		}
+	function myFind(what,data){
+		return (($(data).find(what).text()!='null')?$(data).find(what).text()+' ':'')
 	}
