@@ -20,3 +20,9 @@
 ## Jquery Plugins
 
 * Jpaginate - Paginates long lists
+  * Paginates search results list
+* jQueryUI Dialog Widget - Modal plugin
+  * Opens modal with clicked organization information 
+* jQuery Outside Events - Outside events plugin
+  * Handles clicks for outside of modal
+  * Shuts modal when clicked outside of modal div

@@ -5,23 +5,27 @@
 	<meta name="viewport" content="width=device-width" />
   	<title>ISTE340 P2</title>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+	<!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"> -->
 	<link rel="stylesheet" href="assets/stylesheets/build/main.css" type="text/css" />
 	<script src="http://code.jquery.com/jquery-latest.js" type="text/javascript"></script>
+	<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	<script src="assets/scripts/dev/vendor/jPages.js" type="text/javascript"></script>
+	<script src="assets/scripts/dev/vendor/jquery.ba-outside-events.js" type="text/javascript"></script>
 	<script src="assets/scripts/dev/lib/orgGrabber.js" type="text/javascript"></script>
 </head>
 <body>
-	<div class="outer-container">	
-		<h2>ESD Example</h2><!--
-	  	Input org Id:
-	  	<input type="text" id="orgId" /><input type="button" value="find data" onclick="getDetail($('#orgId').val());getGeneral()"/>-->
+	<div id="dialog" title="ESD" class="outer-container">	
+		<h2>ESD</h2>
 		<div id="dump"></div>
 		<table class="table table-striped table-hover" id="output"></table>
-  		<hr/>
   	</div>
+  	<header class="page-header">
+  		<div class="outer-container">	
+	  		<h1>Organization Search</h1>
+	  		<h3>By: Thomas Boyle</h3>
+	  	</div>
+  	</header>
   	<form  class="outer-container" method="post" action="" id="Form1">
-		//Below is where we will add the code needed to create tabs for the plugin
-		It will be a div with a ul, li's will be each tab  
 		<fieldset><legend>Search Criteria</legend>
 			<label for="orgType">Organization Type</label>
 			<select id="orgType" name="type" onchange="(this.value=='Physician')?$('#orgLabel').html('Physician\'s Name'):$('#orgLabel').html('Organization Name')"></select>
@@ -98,7 +102,7 @@
 	</form>
 		
 	<div class="outer-container holder"></div>
-	<div class="outer-container" id="tabelOutput">
-	</div>
+	<div class="outer-container" id="tabelOutput"></div>
+
 </body>
 </html>

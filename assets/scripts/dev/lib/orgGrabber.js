@@ -26,6 +26,35 @@
 	$(document).ready(function(){
 		getCities('NY');
 		getOrgTypes();
+
+		// Setup modal plugin
+		$( "#dialog" ).dialog({ 
+			autoOpen: false,
+			dialogClass: "outer-container dialog-override"
+		});
+
+		// Setup jQuery outside events plugin
+		// Added extra firstTime bool check since it fires an outside click
+		// the second the dialog is opened, thus auto closing it otherwise
+		var firstTime = true;
+		$("#dialog").bind('clickoutside',function(){
+			if($("#dialog").dialog("isOpen")){
+				// If first outside click when open, set first time to false
+				if(firstTime){	
+					firstTime = false;
+				}
+				// If not first outside click when open, close dialog
+				// and reset firstTime to true
+				else{
+	    			$( "#dialog" ).dialog( "close" );
+	    			firstTime = true;
+				}
+			}
+		});	
+
+		// $("#orgTabs a").click(function(){
+			// window['get'+$(this).href()]('+id+')
+		// });
 	});
 		
 	//For now, this will be a select to get the 'tabs' needed for the orgId.   
@@ -43,14 +72,23 @@
 					//output that server is down/sucks
 				}else{
 					//data should be an xml doc with the tabs that I need
-					var x='<select onchange="window[\'get\'+$(this).val()]('+id+')">';				
+					var x = "<ul id='orgTabs'>";
+					// var x='<select onchange="window[\'get\'+$(this).val()]('+id+')">';				
+
 					$('Tab',data).each(function(){
-						x+='<option value="'+$(this).text()+'">'+$(this).text()+'</option>';
+						x+= '<li><a>' + $(this).text() + '</a></li>';
+						// x+='<option value="'+$(this).text()+'">'+$(this).text()+'</option>';
 					});
-					
+					x+= "</ul>";
+
 					//dump it out
 					$('#dump').html(x+'</select>');
 					getGeneral(id);
+					
+					$("#orgTabs li a").click(function(){
+						$(this).addClass("current");
+						window['get'+$(this).text()](id);
+					});
 				}
 			}
 		});
@@ -352,7 +390,7 @@
 					x+= 	'<th class="header">License</th>';
 					x+= '</tr>';
 
-					$training = $(data).find('physician');
+					$training = $(data).find('person');
 					$training.each(function(i){
 						x+= '<tr>';
 						x+=		'<td>' + myFind('personId', this)	+ '</td>';
@@ -477,7 +515,7 @@
    	 					function(){
    	 						x+='<tr>';
    							x+="<td>"+myFind('type', this)+"<\/td>";
-    						x+="<td style=\"cursor:pointer;color:#987;\" onclick=\"getData("+myFind('OrganizationID', this)+");\">"+myFind('Name', this)+"<\/td>";
+    						x+="<td class='openModal' style=\"cursor:pointer;color:#987;\" onclick=\"getData("+myFind('OrganizationID', this)+");\">"+myFind('Name', this)+"<\/td>";
    	 						x+="<td>"+myFind('city', this)+"<\/td>";
    	 						x+="<td>"+myFind('zip', this)+"<\/td>";
    	 						x+="<td>"+myFind('CountyName', this)+"<\/td>";
@@ -488,10 +526,15 @@
    	 			}
 	     		$('#tabelOutput').html(x);
 
+
 	     		$("div.holder").jPages({
 			        containerID : "tbody",
 			        perPage : 15
 			    });
+
+			    $( ".openModal" ).click(function() {
+					$( "#dialog" ).dialog( "open" );			
+				});
 	   		}
 		});
 	}

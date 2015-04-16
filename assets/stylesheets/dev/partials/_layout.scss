@@ -19,8 +19,54 @@
 		background-color: #477dca;
 		color: white;
 
-		&:hover, &.jp-current{ background-color: #2c5999 }
+		&:hover, &.jp-current{ background-color: #2c5999; }
 		&.jp-previous{ 	border-radius: 3px 0 0 3px; }
 		&.jp-next{		border-radius: 0 3px 3px 0; }
 	}
+}
+
+#myTable{
+	cursor: pointer;
+}
+
+.dialog-override{
+	width: auto !important;
+	background-color: white;
+	border-radius: 3px;
+	border: 1px solid #477dca;
+	border-bottom: 3px solid #477dca;
+	padding: 7px;
+}
+
+#orgTabs{
+	li{
+		display: inline-block;
+		margin: 0 7px;
+		cursor: pointer;
+	}
+	
+	a{
+		display: inline-block;
+		border-radius: 7px 7px 0 0;
+		background-color: #477dca;
+		padding: 7px;
+		color: white;
+
+		&.current, &:hover{
+			background-color: #2c5999;
+		}
+	}	
+}
+
+.page-header{
+	background-color: #DE5662;
+	padding: 70px 0px;
+	h1, h3{
+		@include span-columns(12);
+		text-align: center;
+	}
+}
+
+#Form1{
+	padding: 35px 0px;
 }
