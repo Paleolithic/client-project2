@@ -5,7 +5,7 @@
 * Sass - CSS Preprocessor
   * Bourbon - Sass Mixin library
   * Bourbon Neat - Sass Grid library
-  * Bourbon Bitters - Sass Base Stylization Library
+  * Bourbon Bitters - Sass Base Stylization library
 
 * Grunt - Task runner for typical dev tasks
   * grunt-contrib-concat - Concatenates js files into one file

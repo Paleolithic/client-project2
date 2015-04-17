@@ -36,6 +36,11 @@
 	border: 1px solid #477dca;
 	border-bottom: 3px solid #477dca;
 	padding: 7px;
+
+	.ui-dialog-titlebar-close{
+		position: absolute;
+		right: 7px;
+	}
 }
 
 #orgTabs{
@@ -58,6 +63,25 @@
 	}	
 }
 
+.locations{
+	@include span-columns(6);
+}
+
+#map-wrapper{
+	@include span-columns(6);
+
+	#map{
+		width: 100% !important;
+		height: 400px;
+		margin-top:  0.75em;
+	}
+}
+
+table:not(.locations) + #map-wrapper{
+	display: none;
+}
+
+
 .page-header{
 	background-color: #DE5662;
 	padding: 70px 0px;
@@ -70,3 +94,4 @@
 #Form1{
 	padding: 35px 0px;
 }
+
