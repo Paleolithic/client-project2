@@ -19,11 +19,31 @@
 			Path: ...ESD/{orgId}/People
 */
 
+var browser = navigator.appName
+var ver = navigator.appVersion
+var thestart = parseFloat(ver.indexOf("MSIE"))+1
+var brow_ver = parseFloat(ver.substring(thestart+4,thestart+7))	
+
+if ((browser=="Microsoft Internet Explorer") && (brow_ver < 6))
+{
+	window.location="https://www.google.com/chrome/browser/desktop/index.html";
+}
+
+thestart = parseFloat(ver.indexOf("Chrome/"))+1
+brow_ver = parseFloat(ver.substring(thestart+6,thestart+8))	
+if (thestart != 0 && browser=="Netscape" && brow_ver <= 37)
+{
+	window.location="https://www.google.com/chrome/browser/desktop/index.html";
+}
+
+// if(theStart == 0 && browser==)
+
+
 //Map variable setup
 var mapCreated = false;
 var map;
 var marker;
-	
+
 ///////////////////////////////////////
 //Build the search functionality.
 //onload, get the cities for the state.
@@ -510,67 +530,101 @@ function getOrgTypes(){
 //Do a search. 
 //so when an org is clicked it will create the select and getGeneral().
 function checkSearch(){
-	$.ajax({
-		type: "GET",
-		async: true,
-		cache:false,
-		url: "proxy.php",
-		data: {path: "/Organizations?"+$('#Form1').serialize()},
-		dataType: "xml",
-		success: function(data, status){ 
-				var x='';
-	 			$('#tabelOutput').html('');
-	 			if($(data).find('error').length != 0){
-   	 			$('error', data).each(
-   	 				function(){
-		 				x+="error getting data"; 
-	 					}
-	 				);
-	 			}
-	 			else if($(data).find('row').length==0){
-	 				x+="No data matches for: "+$('#orgType').val() + (($('#orgName').val()!='')?" > name: "+$('#orgName').val():"") + (($('#state').val()!='')?" > State: "+$('state').val():"");
-	 				if($('#cityTown').val()=='' || $('#cityTown').val().search(/No cities/)==0){
-	 					x+="";
-	 				}else{
-	 					x+=" > City: "+$('#cityTown').val();
-	 				}
-	 			//This is for a Physician - it will be different data coming back
-	 			}
-	 			else if($("#orgType").val() == "Physician"){
-	 				$("#resultsTitle").html(' ('+$(data).find('row').length+' total found)');
-	 				// build a table of Physician information
-	 			}
-	 			else{
-	 				$("#resultsTitle").html(' ('+$(data).find('row').length+' total found)');
-	 				x+="<div><table id=\"myTable\" class=\"tablesorter table table-striped table-hover\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\"><thead><tr><th class=\"header\" style=\"width:90px;\">Type<\/th><th class=\"header\">Name<\/th><th class=\"header\">City<\/th><th class=\"header\">Zip<\/th><th class=\"header\" style=\"width:70px;\">County<\/th><th class=\"header\" style=\"width:40px;\">State<\/th><\/tr><\/thead>";
-	 				x+="<tbody id='tbody'>"
-	 				$('row',data).each(
-	 					function(){
-	 						x+='<tr>';
-							x+="<td>"+myFind('type', this)+"<\/td>";
-						x+="<td class='openModal' style=\"cursor:pointer;color:#987;\" onclick=\"getData("+myFind('OrganizationID', this)+");\">"+myFind('Name', this)+"<\/td>";
-	 						x+="<td>"+myFind('city', this)+"<\/td>";
-	 						x+="<td>"+myFind('zip', this)+"<\/td>";
-	 						x+="<td>"+myFind('CountyName', this)+"<\/td>";
-	 						x+="<td>"+myFind('State', this)+"<\/td><\/tr>";
-	 					}
-	 				);
-	 				x+="</tbody><\/table>";
-	 			}
-     		$('#tabelOutput').html(x);
+	var validForm = true;
+	
+	// if($("#orgName").val() == ''){
+	// 	$("#orgName").css("border", "1px solid red");
+	// 	validForm = false;
+	// }
+	// else{
+	// 	$("#orgName").css("border", "none");		
+	// }
+	// if($("#county").val() == ''){
+	// 	$("#county").css("border", "1px solid red");
+	// 	validForm = false;
+	// }
+	// else{
+	// 	$("#county").css("border", "none");
+	// }
+	// if($("#zip").val() == '' ||  !$.isNumeric($("#zip").val())){
+	// 	$("#zip").css("border", "1px solid red");
+	// 	validForm = false;
+	// }
+	// else{
+	// 	$("#zip").css("border", "none");
+	// }
+	if($("#zip").val() != '' &&  !$.isNumeric($("#zip").val())){
+		$("#zip").css("border", "1px solid red");
+		validForm = false;
+	}
+	else{
+		$("#zip").css("border", "none");
+	}
 
-     		// Call the jQuery paginate plugin and allow it to show 15 elements per page
-     		$("div.holder").jPages({
-		        containerID : "tbody",
-		        perPage : 15
-		    });
 
-     		// Call the jQuery modal plugin
-		    $( ".openModal" ).click(function() {
-				$( "#dialog" ).dialog( "open" );			
-			});
-   		}
-	});
+	if(validForm){
+		$.ajax({
+			type: "GET",
+			async: true,
+			cache:false,
+			url: "proxy.php",
+			data: {path: "/Organizations?"+$('#Form1').serialize()},
+			dataType: "xml",
+			success: function(data, status){ 
+					var x='';
+		 			$('#tabelOutput').html('');
+		 			if($(data).find('error').length != 0){
+	   	 			$('error', data).each(
+	   	 				function(){
+			 				x+="error getting data"; 
+		 					}
+		 				);
+		 			}
+		 			else if($(data).find('row').length==0){
+		 				x+="No data matches for: "+$('#orgType').val() + (($('#orgName').val()!='')?" > name: "+$('#orgName').val():"") + (($('#state').val()!='')?" > State: "+$('state').val():"");
+		 				if($('#cityTown').val()=='' || $('#cityTown').val().search(/No cities/)==0){
+		 					x+="";
+		 				}else{
+		 					x+=" > City: "+$('#cityTown').val();
+		 				}
+		 			//This is for a Physician - it will be different data coming back
+		 			}
+		 			else if($("#orgType").val() == "Physician"){
+		 				$("#resultsTitle").html(' ('+$(data).find('row').length+' total found)');
+		 				// build a table of Physician information
+		 			}
+		 			else{
+		 				$("#resultsTitle").html(' ('+$(data).find('row').length+' total found)');
+		 				x+="<div><table id=\"myTable\" class=\"tablesorter table table-striped table-hover\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\"><thead><tr><th class=\"header\" style=\"width:90px;\">Type<\/th><th class=\"header\">Name<\/th><th class=\"header\">City<\/th><th class=\"header\">Zip<\/th><th class=\"header\" style=\"width:70px;\">County<\/th><th class=\"header\" style=\"width:40px;\">State<\/th><\/tr><\/thead>";
+		 				x+="<tbody id='tbody'>"
+		 				$('row',data).each(
+		 					function(){
+		 						x+='<tr>';
+								x+="<td>"+myFind('type', this)+"<\/td>";
+							x+="<td class='openModal' style=\"cursor:pointer;color:#987;\" onclick=\"getData("+myFind('OrganizationID', this)+");\">"+myFind('Name', this)+"<\/td>";
+		 						x+="<td>"+myFind('city', this)+"<\/td>";
+		 						x+="<td>"+myFind('zip', this)+"<\/td>";
+		 						x+="<td>"+myFind('CountyName', this)+"<\/td>";
+		 						x+="<td>"+myFind('State', this)+"<\/td><\/tr>";
+		 					}
+		 				);
+		 				x+="</tbody><\/table>";
+		 			}
+	     		$('#tabelOutput').html(x);
+
+	     		// Call the jQuery paginate plugin and allow it to show 15 elements per page
+	     		$("div.holder").jPages({
+			        containerID : "tbody",
+			        perPage : 15
+			    });
+
+	     		// Call the jQuery modal plugin
+			    $( ".openModal" ).click(function() {
+					$( "#dialog" ).dialog( "open" );			
+				});
+	   		}
+		});
+	}
 }
 
 //Occasionally we will get back 'null' as a value
